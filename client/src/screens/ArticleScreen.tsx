@@ -4,23 +4,27 @@ import { ContentImage, TeacherImage, Media } from "../mocks";
 import {
   articleScreenQuery,
   ArticleScreenQuery,
-  ArticleScreenQueryVariables
+  ArticleScreenQueryVariables,
 } from "../graphql";
-import { ErrorMessage, Loading, CenterContents } from "../components";
+import { ErrorMessage, Loading, CenterContents, Progressbar } from "../components";
+import { useVideoDownload } from "../hooks";
 
-interface Props {
+export interface ArticleScreenProps {
   id: string;
 }
 
-export const ArticleScreen: React.FC<Props> = ({ id }) => {
+export const ArticleScreen: React.FC<ArticleScreenProps> = ({ id }) => {
   const { data, error, loading } = useQuery<
     ArticleScreenQuery,
     ArticleScreenQueryVariables
   >(articleScreenQuery, {
-    variables: { id }
+    variables: { id },
   });
 
   const article = data?.Article;
+  console.log(article)
+
+  // const {downloadFile, progress} = useVideoDownload(article?.media_download!, `Article ${id}`)
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage msg={JSON.stringify(error)} />;
